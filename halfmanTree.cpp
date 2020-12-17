@@ -129,7 +129,11 @@ HalfmanValue* HalfmanTree::translate(uint8_t key) {
 
 string data2string(uint8_t* data, int bitLen) {
     string re;
-
+    for (int i = 0; i < bitLen; i++) {
+        int ind = i / 8;
+        int offset = i % 8;
+        re += (data[ind] & (1 << offset)) ? "1" : "0";
+    }
     return re;
 }
 
@@ -141,5 +145,7 @@ void HalfmanTree::formReverseDir() {
         uint8_t revVal = item.first;
 
         string revKey = data2string(data, bitLen);
+
+        this->revHalfDirectory[revKey] = revVal;
     }
 }

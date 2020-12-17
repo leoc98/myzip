@@ -78,12 +78,33 @@ bool test_high_low(){
     return true;
 }
 
+bool test_rev_tree(){
+    map<uint8_t, unsigned int> cntMap;
+    cntMap['a'] = 20;
+    cntMap['b'] = 2;
+    cntMap['c'] = 1;
+    // cntMap[4] = 250;
+    // cntMap[3] = 124;
+    HalfmanTree ht(cntMap);
+    // ht.print();
+    // ht.halfDirectory.
+    // cout << "the size of halfDirectory:" << ht.halfDirectory.size() << endl;
+    ht.formReverseDir();
+    for (auto key : ht.revHalfDirectory)
+    {
+        cout<<"the key is "<<key.first<<" and the value is "<< key.second<<endl;
+    }
+    // cout<<"the total size of this tree is "<<ht.totalSize()<<endl;
+    return true;
+}
+
 int main() {
     // test_treenode();
     // test_halfman_tree();
     // cout<<test_unzip()<<endl;
     // getFile();
     // test_zip();
-    test_high_low();
+    // test_high_low();
+    test_rev_tree();
     return 0;
 }

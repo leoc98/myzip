@@ -151,9 +151,9 @@ class HalfmanTree {
                               void* arg);
     static void* codingBefore(void* thisNode, void* arg);
     map<uint8_t, HalfmanValue*> halfDirectory;
-    map<string, uint8_t> revHalfDirectory;
 
    public:
+    map<string, uint8_t> revHalfDirectory;
     map<uint8_t, uint32_t> cntMap;
 
     HalfmanTree(map<uint8_t, uint32_t> cntMap) : cntMap(cntMap) {
