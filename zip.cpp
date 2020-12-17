@@ -104,8 +104,8 @@ string Zip::zip_with_password() {
         ch ^= hashKey;
         uint8_t oldHash = hashKey;
         hashKey = MyHash::myHashIt(hashKey);
-        cout << "before is " << (int)oldHash << " after is " << (int)hashKey
-             << endl;
+        // cout << "before is " << (int)oldHash << " after is " << (int)hashKey
+        //  << endl;
         fwrite(&ch, sizeof(uint8_t), 1, fdst);
     }
 

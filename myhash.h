@@ -14,13 +14,13 @@ class MyHash {
         uint8_t hash = 0;
         bool odd = true;
         for (auto ch : password) {
-            cout << ch << endl;
+            // cout << ch << endl;
             if (odd) {
                 hash += ch;
             } else {
                 hash *= ch ? ch : 1;
             }
-            cout << (int)hash << endl;
+            // cout << (int)hash << endl;
             odd = !odd;
         }
         if (hash)

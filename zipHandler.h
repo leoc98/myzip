@@ -5,11 +5,10 @@
 #include <stdio.h>
 #include <map>
 #include <string>
-#include "halfmanTree.h"
 #include "buffer.h"
+#include "halfmanTree.h"
 #include "myhash.h"
 using namespace std;
-
 
 class ZipHandler {
    private:
@@ -21,33 +20,35 @@ class ZipHandler {
     string unzip(string password);
 };
 
-class Zip {
-   private:
+class ZipBase {
+   protected:
     string path;
     FILE* f;
     string password;
     void init() { f = fopen(path.c_str(), "r"); }
-    // uint8_t myHash(string password);// 用于首次生成哈希
-    // uint8_t myHash(uint8_t lastKey);// 用于迭代生成hash
 
    public:
-    Zip(string path, string password) : password(password), path(path) {
+    ZipBase(string path, string password) : password(password), path(path) {
         init();
     }
+    ~ZipBase() { fclose(f); }
+};
+
+class Zip : public ZipBase {
+   public:
+    Zip(string path, string password) : ZipBase(path, password) {}
     string zip();
     string zip_with_password();
     string zip_without_password();
-    ~Zip() { fclose(f); }
+    // ~Zip() { fclose(f); }
 };
 
-class UnZip {
+class UnZip : public ZipBase {
    private:
-    bool usePassWord;
-    FILE* f;
-    string password;
+    bool passwordCheck();
 
    public:
-    UnZip(string path, string password);
+    UnZip(string path, string password) : ZipBase(path, password) {}
     string unzip();
     string unzip_with_password();
     string unzip_without_password();
