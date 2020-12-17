@@ -45,7 +45,7 @@ string Zip::zip_without_password() {
     // cout << "the size of this tree is " << totalLen << endl;
 
     // 生成需要写入文件的数据
-    // 第零个64位是一个参与混淆的固定随机数，该随机数主要用于在解压时判断是否需要密码以及输入密码是否正确
+    // 第零个64位是一个参与混淆(但是不会迭代混淆）的固定随机数，该随机数主要用于在解压时判断是否需要密码以及输入密码是否正确
     // 第一个64位为无符号的整形，记录所有bit数
     // 紧接着的8位为无符号的整形，记录所有的组数量，最多有2^8=256组
     // 后面8+32bit为一组，组的数量参考上行，前8bit为key，后32bit为该key出现次数，用于还原霍夫曼树（未使用的key会被忽略）
@@ -98,9 +98,17 @@ string Zip::zip_with_password() {
 
     FILE* fdst = fopen(tempName.c_str(), "w");
 
-    uint8_t ch;
+    uint8_t ch;  // 定义读取文件的空间
+
+    // 先对头码进行混淆，使用相同的初始hashKey
+    for (int i = 0; i < 8; i++) {
+        fread(&ch, sizeof(uint8_t), 1, fsrc);
+        ch ^= hashKey;
+        fwrite(&ch, sizeof(uint8_t), 1, fdst);
+    }
+
     while (fread(&ch, sizeof(uint8_t), 1, fsrc)) {
-        uint8_t before = ch;
+        // uint8_t before = ch;
         ch ^= hashKey;
         uint8_t oldHash = hashKey;
         hashKey = MyHash::myHashIt(hashKey);

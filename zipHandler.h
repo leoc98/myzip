@@ -44,10 +44,10 @@ class Zip : public ZipBase {
 };
 
 class UnZip : public ZipBase {
-   private:
-    bool passwordCheck();
+//    private:
 
    public:
+    bool passwordCheck();
     UnZip(string path, string password) : ZipBase(path, password) {}
     string unzip();
     string unzip_with_password();

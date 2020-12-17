@@ -60,10 +60,18 @@ bool getFile(){
     return true;
 }
 
+bool test_unzip() {
+    UnZip uz("test.txt.ILLIYAtemp","asdf");
+    return uz.passwordCheck();
+    // return true;
+    // cout<<"the origin path is "
+    // return true;
+}
+
 int main() {
     // test_treenode();
     // test_halfman_tree();
-    test_zip();
+    cout<<test_unzip()<<endl;
     // getFile();
     return 0;
 }

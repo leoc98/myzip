@@ -11,6 +11,9 @@ class MyHash {
     static uint8_t myHash(string password) {
         // 用于首次生成哈希
         // 产生一个散列值，如果该值为0，则用默认密码进行生成
+        // 如果没有密码，则返回0；
+        if (password.size() == 0)
+            return 0;
         uint8_t hash = 0;
         bool odd = true;
         for (auto ch : password) {
