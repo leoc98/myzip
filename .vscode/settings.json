@@ -1,0 +1,26 @@
+{
+  "files.associations": {
+    "string": "cpp",
+    "iostream": "cpp",
+    "cstddef": "cpp",
+    "unordered_map": "cpp",
+    "array": "cpp",
+    "deque": "cpp",
+    "vector": "cpp",
+    "*.tcc": "cpp",
+    "fstream": "cpp",
+    "memory": "cpp",
+    "optional": "cpp",
+    "string_view": "cpp",
+    "system_error": "cpp"
+  },
+
+  "editor.formatOnSave": true,
+  "C_Cpp.clang_format_style": "{ BasedOnStyle: Chromium, IndentWidth: 4}"
+  // "editor.formatOnSave": true,
+  // "clang-format.executable": "/absolute/path/to/clang-format",
+  // "C_Cpp.clang_format_style": {
+  //     "BasedOnStyle": "Google",
+  //     "IndentWidth": "4"
+  //   }
+}
