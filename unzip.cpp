@@ -34,33 +34,33 @@ bool UnZip::passwordCheck() {
 }
 
 string UnZip::unzip_without_password() {
-    string restoreName = path;
     char revSuffix[] = "AYILLI.";
     char* moveRevSuffix = revSuffix;
 
     // 检查后缀名是否正确
-    for (auto rit = path.rbegin(); rit != path.rend(); rit++) {
+    for (auto rit = path.rbegin(); rit != path.rend() && *moveRevSuffix != '\0';
+         rit++) {
         if (*rit != *(moveRevSuffix++)) {
             err = UNZIP_FILE_TYPE_ERROR;
             return "";
         }
     }
 
-    // 如果最后结束时指针不在\0处，说明未遍历完成
-    if (*moveRevSuffix != '\0') {
-        err = UNZIP_FILE_TYPE_ERROR;
-        return "";
-    }
+    // // 如果最后结束时指针不在\0处，说明未遍历完成
+    // if (*moveRevSuffix != '\0') {
+    //     err = UNZIP_FILE_TYPE_ERROR;
+    //     return "";
+    // }
 
     // 逐步还原所有数据
     // 第一个64位为无符号的整形，记录所有bit数
-    // 紧接着的8位为无符号的整形，记录所有的组数量，最多有2^8=256组
+    // 紧接着的16位为无符号的整形，记录所有的组数量，最多有2^8=256组
     // 后面8+32bit为一组，组的数量参考上行，前8bit为key，后32bit为该key出现次数，用于还原霍夫曼树（未使用的key会被忽略）
     // 最后为数据，对齐的部份可以不用考虑
     uint64_t totalLen;
-    uint8_t cataSize;
+    uint16_t cataSize;
     fread(&totalLen, sizeof(uint64_t), 1, f);
-    fread(&cataSize, sizeof(uint8_t), 1, f);
+    fread(&cataSize, sizeof(uint16_t), 1, f);
 
     map<uint8_t, uint32_t> cntMap;
 
@@ -72,7 +72,43 @@ string UnZip::unzip_without_password() {
         cntMap[key] = cnt;
     }
 
-    return "";
+    // 构造用于解压的逆转树
+    HalfmanTree ht(cntMap);
+    ht.formReverseDir();
+
+    string restoreName(path.begin(), path.begin() + path.size() - 7);
+
+    restoreName += ".jpg";
+
+    FILE* fres = fopen(restoreName.c_str(), "wb");
+    // FILE* fbug = fopen("testPlus.txt", "rb");
+    int bugcnt=0;
+
+    uint64_t cntBit = 0;
+    // string tempSpace[8] = {0};
+    string key;
+    while (cntBit < totalLen) {
+        int remain = totalLen - cntBit >= 8 ? 8 : totalLen - cntBit;
+        cntBit += remain;
+        uint8_t ch;
+        fread(&ch, sizeof(uint8_t), 1, f);
+        for (int i = 0; i < remain; i++) {
+            key += ch & (1 << i) ? "1" : "0";
+            bool exist;
+            uint8_t val = ht.revTranslate(key, &exist);
+            if (exist) {
+                key.clear();
+                fwrite(&val, sizeof(uint8_t), 1, fres);
+            }
+        }
+    }
+
+    if (cntBit != totalLen) {
+        cout << "没有将所有的bit转化！！！" << endl;
+    }
+
+    fclose(fres);
+    return restoreName;
 }
 
 string UnZip::unzip_with_password() {

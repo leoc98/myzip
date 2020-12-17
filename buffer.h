@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <memory.h>
 #include <stdio.h>
-#define BUFFER_SIZE 2
+#define BUFFER_SIZE 512
 #define OVERFLOW_MAX 32
 #define bitsMask(x) (1 << (x)) - 1
 #define bitMask(x) 1 << (x)

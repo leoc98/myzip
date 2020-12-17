@@ -149,3 +149,13 @@ void HalfmanTree::formReverseDir() {
         this->revHalfDirectory[revKey] = revVal;
     }
 }
+
+uint8_t HalfmanTree::revTranslate(string key, bool* exist) {
+    if (revHalfDirectory.count(key)) {
+        *exist = true;
+        return revHalfDirectory[key];
+    } else {
+        *exist = false;
+    }
+    return 0;
+}

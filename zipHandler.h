@@ -31,7 +31,7 @@ class ZipBase {
     string password;
     int err;
     void init() {
-        f = fopen(path.c_str(), "r");
+        f = fopen(path.c_str(), "rb");
         err = NO_ERR;
     }
 

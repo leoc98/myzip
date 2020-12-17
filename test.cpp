@@ -44,41 +44,46 @@
 //     return true;
 // }
 
-bool test_zip() {
-    Zip z("test.txt","");
+bool getFile() {
+    FILE* f = fopen("test.txt.ILLIYA", "rb");
+    uint8_t ch;
+    while (fread(&ch, sizeof(uint8_t), 1, f)) {
+        cout << (int)ch << endl;
+    }
+    return true;
+}
+
+bool test_zip(string path) {
+    // Zip z("测试用涩情图片.jpg", "");
+    // Zip z("test.txt", "");
+    Zip z(path, "");
     z.zip();
     // cout<<"the origin path is "
     return true;
 }
 
-bool getFile(){
-    FILE* f = fopen("test.txt.ILLIYA","r");
-    uint8_t ch;
-    while(fread(&ch,sizeof(uint8_t),1,f)){
-        cout<<(int)ch<<endl;
-    }
+bool test_unzip(string path) {
+    // UnZip uz("测试用涩情图片.jpg.ILLIYA", "");
+    // UnZip uz("test.txt.ILLIYA", "");
+    UnZip uz(path + ".ILLIYA", "");
+    cout << uz.unzip();
     return true;
-}
-
-bool test_unzip() {
-    UnZip uz("test.txt.ILLIYAtemp","asdf");
-    return uz.passwordCheck();
     // return true;
     // cout<<"the origin path is "
     // return true;
 }
 
-bool test_high_low(){
-    FILE* f = fopen("test.txt.ILLIYA","r");
-    char ch[4*8];
-    fread(&ch,sizeof(uint8_t),4*8,f);
+bool test_high_low() {
+    FILE* f = fopen("test.txt.ILLIYA", "rb");
+    char ch[4 * 8];
+    fread(&ch, sizeof(uint8_t), 4 * 8, f);
     char a;
-    fread(&a,sizeof(char),1,f);
+    fread(&a, sizeof(char), 1, f);
     fclose(f);
     return true;
 }
 
-bool test_rev_tree(){
+bool test_rev_tree() {
     map<uint8_t, unsigned int> cntMap;
     cntMap['a'] = 20;
     cntMap['b'] = 2;
@@ -90,21 +95,48 @@ bool test_rev_tree(){
     // ht.halfDirectory.
     // cout << "the size of halfDirectory:" << ht.halfDirectory.size() << endl;
     ht.formReverseDir();
-    for (auto key : ht.revHalfDirectory)
-    {
-        cout<<"the key is "<<key.first<<" and the value is "<< key.second<<endl;
-    }
-    // cout<<"the total size of this tree is "<<ht.totalSize()<<endl;
+    // for (auto key : ht.revHalfDirectory)
+    // {
+    //     cout<<"the key is "<<key.first<<" and the value is "<<
+    //     key.second<<endl;
+    // }
+    // // cout<<"the total size of this tree is "<<ht.totalSize()<<endl;
     return true;
 }
 
 int main() {
+    int ctl;
+    cout << "请输入控制编号，1为解压，0为压缩" << endl;
+    string path;
+    cin >> ctl;
+    cout << "请输入路径" << endl;
+    cin >> path;
+    if (ctl) {
+        cout << "进行了解压缩" << endl;
+        test_unzip(path);
+    } else {
+        cout << "进行了压缩" << endl;
+        test_zip(path);
+    }
+
+    // FILE* fsrc = fopen("测试用涩情图片.jpg", "rb");
+    // FILE* fdst = fopen("测试用涩情图片移植版.jpg", "wb");
+
+    // uint8_t ch;
+
+    // while (fread(&ch, sizeof(uint8_t), 1, fsrc)) {
+    //     fwrite(&ch, sizeof(uint8_t), 1, fdst);
+    // }
+
+    // fclose(fsrc);
+    // fclose(fdst);
+
     // test_treenode();
     // test_halfman_tree();
-    // cout<<test_unzip()<<endl;
+    // test_unzip();
     // getFile();
     // test_zip();
     // test_high_low();
-    test_rev_tree();
+    // test_rev_tree();
     return 0;
 }

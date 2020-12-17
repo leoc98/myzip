@@ -22,7 +22,7 @@ string Zip::zip_without_password() {
 
     /*
          注意：在内存中是以小端存储，即逻辑存储格式是
-             low 1110 1000 high 
+             low 1110 1000 high
          但是如果用uint8_t读出，结果为十进制26，即为
              0001 0111 = 0x17
          所以在读取时，应当读取后将uint8_t给倒转过来才是正确的解压方式
@@ -33,8 +33,10 @@ string Zip::zip_without_password() {
     map<uint8_t, uint32_t> cntMap;
     uint8_t ch;
     while (fread(&ch, sizeof(uint8_t), 1, f)) {
+        cout<<ch;
         cntMap[ch]++;
     }
+    cout<<endl;
 
     // 生成霍夫曼树
     HalfmanTree ht(cntMap);
@@ -42,21 +44,21 @@ string Zip::zip_without_password() {
     // 生成压缩文件指针
     string tempPath = path;
     tempPath += ".ILLIYA";
-    FILE* ftmp = fopen(tempPath.c_str(), "w");
+    FILE* ftmp = fopen(tempPath.c_str(), "wb");
     // cout << "the size of this tree is " << totalLen << endl;
 
     // 生成需要写入文件的数据
     // 第零个64位是一个参与混淆(但是不会迭代混淆）的固定随机数，该随机数主要用于在解压时判断是否需要密码以及输入密码是否正确
     // 第一个64位为无符号的整形，记录所有bit数
-    // 紧接着的8位为无符号的整形，记录所有的组数量，最多有2^8=256组
+    // 紧接着的16位为无符号的整形，记录所有的组数量，最多有2^8=256组
     // 后面8+32bit为一组，组的数量参考上行，前8bit为key，后32bit为该key出现次数，用于还原霍夫曼树（未使用的key会被忽略）
     const char* randomHead = RANDOM_HEAD;
     const uint64_t* randomHead64 = (const uint64_t*)randomHead;
     fwrite(randomHead64, sizeof(uint64_t), 1, ftmp);
     uint64_t totalLen = ht.totalSize();
-    uint8_t cataSize = ht.getDirectorySize();
+    uint16_t cataSize = ht.getDirectorySize();
     fwrite(&totalLen, sizeof(uint64_t), 1, ftmp);
-    fwrite(&cataSize, sizeof(uint8_t), 1, ftmp);
+    fwrite(&cataSize, sizeof(uint16_t), 1, ftmp);
     for (auto item : ht.cntMap) {
         uint8_t key = item.first;
         uint32_t cnt = item.second;
@@ -68,13 +70,23 @@ string Zip::zip_without_password() {
     fseek(f, 0, SEEK_SET);
     Buffer buf(ftmp);
     uint8_t& key = ch;
+
+    uint64_t bitCnt = 0;
+
     while (fread(&key, sizeof(uint8_t), 1, f)) {
+        cout<<key;
+
         HalfmanValue* hv = ht.translate(key);
         uint8_t* data = hv->value;
         int bitLength = hv->bitLength;
+        bitCnt += bitLength;
         buf.fill(data, bitLength);
     }
 
+    cout<<endl;
+
+    cout << "actual wrote in bit number is " << bitCnt << endl;
+    cout << "the written total bit is " << totalLen << endl;
     // 将为填满的buffer写入文件
     buf.write();
 
@@ -95,9 +107,9 @@ string Zip::zip_with_password() {
 
     rename(tempName.c_str(), temptempName.c_str());
 
-    FILE* fsrc = fopen(temptempName.c_str(), "r");
+    FILE* fsrc = fopen(temptempName.c_str(), "rb");
 
-    FILE* fdst = fopen(tempName.c_str(), "w");
+    FILE* fdst = fopen(tempName.c_str(), "wb");
 
     uint8_t ch;  // 定义读取文件的空间
 
