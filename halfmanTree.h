@@ -93,7 +93,25 @@ class TreeNode {
 
 class HalfmanValue {
    private:
-    void init(){};
+    void init() {
+
+        // 不需要再进行逆转，因为写入的数据用byte读出后从高位读出可以按顺序获得编码
+        // uint8_t* revVal = new uint8_t[bitLength >> ELEM_LENGTH_SHIFT];
+        // uint8_t* low;
+        // for (int i = 0; i < bitLength; i++) {
+        //     low = &value[i / 8];
+        //     if (*low & 1) {
+        //         int revInd = (bitLength - i - 1) / 8;
+        //         int offset = (bitLength - i - 1) % 8;
+        //         revVal[revInd] |= 1 << offset;
+        //     }
+        //     (*low) >>= 1;
+        // }
+        // uint8_t* temp;
+        // temp = value;
+        // value = revVal;
+        // delete temp;
+    }
 
    public:
     uint8_t* value;
@@ -133,16 +151,27 @@ class HalfmanTree {
                               void* arg);
     static void* codingBefore(void* thisNode, void* arg);
     map<uint8_t, HalfmanValue*> halfDirectory;
-    // void formTree();
+    map<string, uint8_t> revHalfDirectory;
 
    public:
     map<uint8_t, uint32_t> cntMap;
-    HalfmanValue* translate(uint8_t key);
-    int getDirectorySize() { return halfDirectory.size(); }
-    HalfmanTree(map<uint8_t,uint32_t> cntMap) : cntMap(cntMap) {
+
+    HalfmanTree(map<uint8_t, uint32_t> cntMap) : cntMap(cntMap) {
         halfDirectory.clear();
         init();
     }
+    void* dfs(TreeNode* root,
+              HandleFunctionBefore before,
+              HandleFunctionMiddle middle,
+              HandleFunctionAfter after,
+              void* arg);
+    HalfmanValue* translate(uint8_t key);
+
+    void formReverseDir();
+
+    int totalSize();
+    int getDirectorySize() { return halfDirectory.size(); }
+
     static void* printNode(void* thisNode, void* arg) {
         TreeNode* tn = (TreeNode*)thisNode;
         if (tn)
@@ -155,12 +184,6 @@ class HalfmanTree {
             halfDirectory[key.first]->print();
         }
     }
-    int totalSize();
-    void* dfs(TreeNode* root,
-              HandleFunctionBefore before,
-              HandleFunctionMiddle middle,
-              HandleFunctionAfter after,
-              void* arg);
     static void* nopbefore(void* thisNode, void* arg) { return NULL; }
     static void* nopmiddle(void* thisNode,
                            void* thisRet,

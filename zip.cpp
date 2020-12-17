@@ -22,10 +22,11 @@ string Zip::zip_without_password() {
 
     /*
          注意：在内存中是以小端存储，即逻辑存储格式是
-             1110 1000
+             low 1110 1000 high 
          但是如果用uint8_t读出，结果为十进制26，即为
-             0001 0111
+             0001 0111 = 0x17
          所以在读取时，应当读取后将uint8_t给倒转过来才是正确的解压方式
+         或者从低位读出位，按序放入string即可。
     */
 
     // 生成次数表
@@ -117,7 +118,7 @@ string Zip::zip_with_password() {
         fwrite(&ch, sizeof(uint8_t), 1, fdst);
     }
 
-    // remove(temptempName.c_str());
+    remove(temptempName.c_str());
     fclose(fsrc);
     fclose(fdst);
 

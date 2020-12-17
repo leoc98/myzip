@@ -45,7 +45,7 @@
 // }
 
 bool test_zip() {
-    Zip z("test.txt","@@");
+    Zip z("test.txt","");
     z.zip();
     // cout<<"the origin path is "
     return true;
@@ -68,10 +68,22 @@ bool test_unzip() {
     // return true;
 }
 
+bool test_high_low(){
+    FILE* f = fopen("test.txt.ILLIYA","r");
+    char ch[4*8];
+    fread(&ch,sizeof(uint8_t),4*8,f);
+    char a;
+    fread(&a,sizeof(char),1,f);
+    fclose(f);
+    return true;
+}
+
 int main() {
     // test_treenode();
     // test_halfman_tree();
-    cout<<test_unzip()<<endl;
+    // cout<<test_unzip()<<endl;
     // getFile();
+    // test_zip();
+    test_high_low();
     return 0;
 }

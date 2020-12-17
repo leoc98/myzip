@@ -6,7 +6,7 @@
 #define BUFFER_SIZE 2
 #define OVERFLOW_MAX 32
 #define bitsMask(x) (1 << (x)) - 1
-#define bitMast(x) 1 << (x)
+#define bitMask(x) 1 << (x)
 class Buffer {
    private:
     void init();

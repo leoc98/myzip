@@ -10,6 +10,10 @@
 #include "myhash.h"
 using namespace std;
 
+#define NO_ERR 0
+#define UNZIP_FILE_TYPE_ERROR 1
+#define UNZIP_FILE_TOO_SMALL 2
+#define INCORRECT_PASSWORD 3
 class ZipHandler {
    private:
     string path;
@@ -25,7 +29,11 @@ class ZipBase {
     string path;
     FILE* f;
     string password;
-    void init() { f = fopen(path.c_str(), "r"); }
+    int err;
+    void init() {
+        f = fopen(path.c_str(), "r");
+        err = NO_ERR;
+    }
 
    public:
     ZipBase(string path, string password) : password(password), path(path) {
@@ -44,7 +52,7 @@ class Zip : public ZipBase {
 };
 
 class UnZip : public ZipBase {
-//    private:
+    //    private:
 
    public:
     bool passwordCheck();
