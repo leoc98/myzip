@@ -53,20 +53,29 @@ bool getFile() {
     return true;
 }
 
-bool test_zip(string path) {
+bool test_zip(string path, string password) {
     // Zip z("测试用涩情图片.jpg", "");
     // Zip z("test.txt", "");
-    Zip z(path, "");
+    if (password.size() == 1)
+        password.clear();
+    Zip z(path, password);
     z.zip();
     // cout<<"the origin path is "
     return true;
 }
 
-bool test_unzip(string path) {
+bool test_unzip(string path, string password) {
     // UnZip uz("测试用涩情图片.jpg.ILLIYA", "");
     // UnZip uz("test.txt.ILLIYA", "");
-    UnZip uz(path + ".ILLIYA", "");
-    cout << uz.unzip();
+    if (password.size() == 1)
+        password.clear();
+    UnZip uz(path + ".ILLIYA", password);
+    string unzipFileName = uz.unzip();
+    if (unzipFileName.size() == 0) {
+        cout << "解压失败" << endl;
+    } else {
+        cout << "解压完成：新文件名为 " << unzipFileName << endl;
+    }
     return true;
     // return true;
     // cout<<"the origin path is "
@@ -107,16 +116,18 @@ bool test_rev_tree() {
 int main() {
     int ctl;
     cout << "请输入控制编号，1为解压，0为压缩" << endl;
-    string path;
+    string path, password;
     cin >> ctl;
     cout << "请输入路径" << endl;
     cin >> path;
+    cout << "请输入密码" << endl;
+    cin >> password;
     if (ctl) {
         cout << "进行了解压缩" << endl;
-        test_unzip(path);
+        test_unzip(path, password);
     } else {
         cout << "进行了压缩" << endl;
-        test_zip(path);
+        test_zip(path, password);
     }
 
     // FILE* fsrc = fopen("测试用涩情图片.jpg", "rb");

@@ -33,10 +33,10 @@ string Zip::zip_without_password() {
     map<uint8_t, uint32_t> cntMap;
     uint8_t ch;
     while (fread(&ch, sizeof(uint8_t), 1, f)) {
-        cout<<ch;
+        // cout<<ch;
         cntMap[ch]++;
     }
-    cout<<endl;
+    // cout<<endl;
 
     // 生成霍夫曼树
     HalfmanTree ht(cntMap);
@@ -74,7 +74,7 @@ string Zip::zip_without_password() {
     uint64_t bitCnt = 0;
 
     while (fread(&key, sizeof(uint8_t), 1, f)) {
-        cout<<key;
+        // cout<<key;
 
         HalfmanValue* hv = ht.translate(key);
         uint8_t* data = hv->value;
@@ -83,7 +83,7 @@ string Zip::zip_without_password() {
         buf.fill(data, bitLength);
     }
 
-    cout<<endl;
+    // cout<<endl;
 
     cout << "actual wrote in bit number is " << bitCnt << endl;
     cout << "the written total bit is " << totalLen << endl;
@@ -123,7 +123,7 @@ string Zip::zip_with_password() {
     while (fread(&ch, sizeof(uint8_t), 1, fsrc)) {
         // uint8_t before = ch;
         ch ^= hashKey;
-        uint8_t oldHash = hashKey;
+        // uint8_t oldHash = hashKey;
         hashKey = MyHash::myHashIt(hashKey);
         // cout << "before is " << (int)oldHash << " after is " << (int)hashKey
         //  << endl;
