@@ -1,5 +1,5 @@
 #include "zipHandler.h"
-
+#define __TEST_FILENAME_SUFFIX__
 string UnZip::unzip() {
     // 如果返回的是空字串，说明解压失败
     if (passwordCheck() == false)
@@ -83,7 +83,10 @@ string UnZip::unzip_without_password() {
 
     string restoreName(path.begin(), path.begin() + path.size() - 7);
 
-    // restoreName += ".jpg";
+#ifdef __TEST_FILENAME_SUFFIX__
+    restoreName += ".test";
+    cout<<"you are running a test program\n the filename is "<<restoreName<<endl;
+#endif
 
     FILE* fres = fopen(restoreName.c_str(), "wb");
     // FILE* fbug = fopen("testPlus.txt", "rb");
@@ -141,7 +144,7 @@ string UnZip::unzip_with_password() {
     fclose(f);
     fclose(ftmp);
     rename(tempName.c_str(), path.c_str());
-    f = fopen(path.c_str(),"rb");
+    f = fopen(path.c_str(), "rb");
     // fseek(f, 0, SEEK_SET);
     // return "";
     return unzip_without_password();

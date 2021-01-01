@@ -159,3 +159,14 @@ uint8_t HalfmanTree::revTranslate(string key, bool* exist) {
     }
     return 0;
 }
+
+// void* delNode(void* thisNode,
+//               void* thisRet,
+//               void* leftRet,
+//               void* middleRet,
+//               void* rightRight,
+//               void* arg) {
+//     if (thisNode)
+//         delete thisNode;
+//     return NULL;
+// }

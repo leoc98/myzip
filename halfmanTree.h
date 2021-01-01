@@ -94,7 +94,6 @@ class TreeNode {
 class HalfmanValue {
    private:
     void init() {
-
         // 不需要再进行逆转，因为写入的数据用byte读出后从高位读出可以按顺序获得编码
         // uint8_t* revVal = new uint8_t[bitLength >> ELEM_LENGTH_SHIFT];
         // uint8_t* low;
@@ -160,13 +159,19 @@ class HalfmanTree {
         halfDirectory.clear();
         init();
     }
+    ~HalfmanTree() {
+        dfs(root, nopbefore, nopmiddle, delNode, NULL);
+        for (auto item : halfDirectory) {
+            delete item.second;
+        }
+    }
     void* dfs(TreeNode* root,
               HandleFunctionBefore before,
               HandleFunctionMiddle middle,
               HandleFunctionAfter after,
               void* arg);
     HalfmanValue* translate(uint8_t key);
-    uint8_t revTranslate(string key,bool* exist);
+    uint8_t revTranslate(string key, bool* exist);
 
     void formReverseDir();
 
@@ -198,6 +203,16 @@ class HalfmanTree {
                           void* middleRet,
                           void* rightRet,
                           void* arg) {
+        return NULL;
+    }
+    static void* delNode(void* thisNode,
+                         void* thisRet,
+                         void* leftRet,
+                         void* middleRet,
+                         void* rightRight,
+                         void* arg) {
+        if (thisNode)
+            delete (TreeNode*)thisNode;
         return NULL;
     }
 };
