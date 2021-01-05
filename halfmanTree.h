@@ -7,6 +7,7 @@
 #include <map>
 #include <queue>
 #include <vector>
+using namespace std;
 #define ELEM_LENGTH 8
 #define ELEM_LENGTH_SHIFT 3
 typedef void* (*HandleFunctionAfter)(void* thisNode,
@@ -136,6 +137,9 @@ class HalfmanValue {
 
 class HalfmanTree {
    private:
+   #ifdef __TEST_FILENAME_SUFFIX__
+   public:
+   #endif
     TreeNode* root;
     void init();
     static void* codingAfter(void* thisNode,
@@ -149,10 +153,10 @@ class HalfmanTree {
                               void* leftRet,
                               void* arg);
     static void* codingBefore(void* thisNode, void* arg);
+   public:
     map<uint8_t, HalfmanValue*> halfDirectory;
     map<string, uint8_t> revHalfDirectory;
 
-   public:
     map<uint8_t, uint32_t> cntMap;
 
     HalfmanTree(map<uint8_t, uint32_t> cntMap) : cntMap(cntMap) {

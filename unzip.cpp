@@ -1,5 +1,5 @@
 #include "zipHandler.h"
-#define __TEST_FILENAME_SUFFIX__
+
 string UnZip::unzip() {
     // 如果返回的是空字串，说明解压失败
     if (passwordCheck() == false)

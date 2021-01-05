@@ -2,24 +2,28 @@
 #include <iostream>
 // #define __TEST_FILENAME_SUFFIX__
 #include "zipHandler.h"
+#ifndef __TEST_FILENAME_SUFFIX__
+#define __TEST_FILENAME_SUFFIX__
+#endif
+
 bool test_treenode() {
     TreeNode a(1, 100);
     TreeNode b(2, 200);
     TreeNode* c = a + b;
     TreeNode d(2, 100);
-    // printf("%s",a.print());
-    // printf("%s",b.print());
-    // cout << a.print() << endl;
-    // cout << b.print() << endl;
-    // cout << c->print() << endl;
-    // cout << "c left child msg:"<<endl;
-    // cout << c->getChild(LEFT)->print()<<endl;
-    // cout << "c right child msg:"<<endl;
-    // cout << c->getChild(RIGHT)->print()<<endl;
-    // cout << "a<b?" << (a<b) <<endl;
-    // cout << "a=b?" << (a==b) <<endl;
-    // cout << "a>b?" << (a>b) <<endl;
-    // cout << "a=d?" << (a==d) <<endl;
+    printf("%s",a.print());
+    printf("%s",b.print());
+    cout << a.print() << endl;
+    cout << b.print() << endl;
+    cout << c->print() << endl;
+    cout << "c left child msg:"<<endl;
+    cout << c->getChild(LEFT)->print()<<endl;
+    cout << "c right child msg:"<<endl;
+    cout << c->getChild(RIGHT)->print()<<endl;
+    cout << "a<b?" << (a<b) <<endl;
+    cout << "a=b?" << (a==b) <<endl;
+    cout << "a>b?" << (a>b) <<endl;
+    cout << "a=d?" << (a==d) <<endl;
     return true;
 }
 
@@ -32,11 +36,11 @@ bool test_halfman_tree() {
     cntMap[3] = 124;
     HalfmanTree ht(cntMap);
     ht.print();
-    // ht.halfDirectory.
-    // cout << "the size of halfDirectory:" << ht.halfDirectory.size() << endl;
-    // for (auto key : ht.halfDirectory) {
-    //     ht.printNode();
-    // }
+    // ht.halfDirectory;
+    cout << "the size of halfDirectory:" << ht.halfDirectory.size() << endl;
+    for (auto key : ht.halfDirectory) {
+        ht.print();
+    }
     cout << "the total size of this tree is " << ht.totalSize() << endl;
     return true;
 }
@@ -101,12 +105,12 @@ bool test_rev_tree() {
     // ht.halfDirectory.
     // cout << "the size of halfDirectory:" << ht.halfDirectory.size() << endl;
     ht.formReverseDir();
-    // for (auto key : ht.revHalfDirectory)
-    // {
-    //     cout<<"the key is "<<key.first<<" and the value is "<<
-    //     key.second<<endl;
-    // }
-    // // cout<<"the total size of this tree is "<<ht.totalSize()<<endl;
+    for (auto key : ht.revHalfDirectory)
+    {
+        cout<<"the key is "<<key.first<<" and the value is "<<
+        key.second<<endl;
+    }
+    // cout<<"the total size of this tree is "<<ht.totalSize()<<endl;
     return true;
 }
 
@@ -117,21 +121,28 @@ bool test_del_haltree() {
 }
 
 bool test_zip_then_unzip() {
-    string path = "./测试文件/英雄联盟";
-    string password = "";
+    string path = "./测试文件/1.jpg";
+    string password = "123";
 
     Zip z(path, password);
     z.zip();
 
-    UnZip uz(path + ".ILLIYA", password);
-    cout << "return name is" << uz.unzip() << endl;
+    UnZip uz(path + ".ILLIYA", "12");
+    string retName = uz.unzip();
+    cout << "return name is" << retName.size() << endl;
 
     cout << "successfully running all program!" << endl;
     return true;
 }
 
 int main() {
+    test_treenode();
+    // test_halfman_tree();
+    test_rev_tree();
+    test_del_haltree();
     test_zip_then_unzip();
+
+
     // test_del_haltree();
     // int ctl;
     // cout << "请输入控制编号，1为解压，0为压缩" << endl;

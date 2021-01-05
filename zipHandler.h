@@ -14,15 +14,15 @@ using namespace std;
 #define UNZIP_FILE_TYPE_ERROR 1
 #define UNZIP_FILE_TOO_SMALL 2
 #define INCORRECT_PASSWORD 3
-class ZipHandler {
-   private:
-    string path;
+// class ZipHandler {
+//    private:
+//     string path;
 
-   public:
-    ZipHandler(string path);
-    string zip(string password);
-    string unzip(string password);
-};
+//    public:
+//     ZipHandler(string path);
+//     string zip(string password);
+//     string unzip(string password);
+// };
 
 class ZipBase {
    protected:
